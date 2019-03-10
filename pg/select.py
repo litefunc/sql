@@ -118,3 +118,6 @@ def sdo(cols: Iterable, table: str, orderby: Iterable) -> SelectDistict:
 def sdwo(cols: Iterable, table: str, where: dict, orderby: Iterable) -> SelectDistict:
     return SelectDistict(cols, table).where(where).orderby(orderby)
 
+
+def columns(table: str, conn):
+    return list(pd.read_sql_query(f'select * from {table} where false;', conn))
