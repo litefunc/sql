@@ -1,19 +1,18 @@
+from common.connection import conn_local_pg
+from sql.utils import quote_join
+from typing import List, Iterable
+import syspath
 import pandas as pd
 import os
 import sys
 if os.getenv('MY_PYTHON_PKG') not in sys.path:
     sys.path.append(os.getenv('MY_PYTHON_PKG'))
-import syspath
-from typing import List, Iterable
-from sql.utils import quote_join
-from common.connection import conn_local_pg
 
-mops = conn_local_pg('mops')
 
 class Query():
     def __init__(self, sql: str, values: Iterable):
-         self.sql = sql
-         self.values = values
+        self.sql = sql
+        self.values = values
 
     def where(self, condition: dict):
         __condition = ' and '.join([f'"{key}"=%s' for key in condition.keys()])
@@ -22,7 +21,7 @@ class Query():
     def orderby(self, orders: Iterable[str]):
         __orders = quote_join('"', orders)
         return Query(f'{self.sql} ORDER BY {__orders}', self.values)
-    
+
     def limit(self, n: int):
         return Query(f'{self.sql} LIMIT {n}', self.values)
 
